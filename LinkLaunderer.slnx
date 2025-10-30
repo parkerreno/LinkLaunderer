@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="src/LinkLaunderer.App/LinkLaunderer.App.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+  <Project Path="src/LinkLaunderer.Lib/LinkLaunderer.Lib.csproj" Id="c59a5d4d-b95d-4dc1-8db7-c59226ef505c" />
+  <Project Path="src/LinkLaunderer.Test/LinkLaunderer.Test.csproj" Id="a182c335-8ae9-4ad5-9700-72d640fbdfca" />
+</Solution>
