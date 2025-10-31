@@ -5,22 +5,43 @@
              x:Class="LinkLaunderer.MainPage"
              Title="Settings">
 
-    <ScrollView>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
         <VerticalStackLayout
             Padding="30,0"
             Spacing="12">
 
             <controls:SettingsItem
-                LabelText="Label one"
-                DescriptionText="Desssciciedid"/>
+                x:Name="RemoveQueryParametersSetting"
+                LabelText="Remove Query Parameters"
+                DescriptionText="Removes non-allowed query parameters from links"
+                Toggled="RemoveQuery_Toggled"/>
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me" 
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Fill" />
+            <controls:SettingsItem
+                x:Name="ReplaceLinkHostsSetting"
+                LabelText="Replace Link Hosts"
+                DescriptionText="Perform link host replacements"
+                Toggled="HostReplacement_Toggled"/>
+
+            <controls:SettingsItem
+                x:Name="WwwHostSetting"
+                LabelText="Auto-Match www Prefix"
+                DescriptionText="Don't require separate host entries for www.* subdomains"
+                Toggled="WwwMatch_Toggled"/>
         </VerticalStackLayout>
-    </ScrollView>
+        
+        <Button
+            Grid.Row="1"
+            Margin="12"
+            x:Name="SaveButton"
+            Text="Save Changes" 
+            SemanticProperties.Hint="Saves changes to preferences"
+            Clicked="OnSaveClicked"
+            HorizontalOptions="Fill" />
+    </Grid>
 
 </ContentPage>

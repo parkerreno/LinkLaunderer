@@ -4,57 +4,46 @@
 
     public partial class MainPage : ContentPage
     {
-        int count = 0;
+        LinkProcessorOptions options;
 
         public MainPage()
         {
             InitializeComponent();
-            CheckForSharedContent();
+            LoadPreferences();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            CheckForSharedContent();
+            LoadPreferences();
         }
 
-        private void CheckForSharedContent()
+        private async void OnSaveClicked(object? sender, EventArgs e)
         {
-            if (Preferences.ContainsKey("SharedText"))
-            {
-                var sharedText = Preferences.Get("SharedText", string.Empty);
-                if (!string.IsNullOrEmpty(sharedText))
-                {
-                    // Clear the preference so we don't process it again
-                    Preferences.Remove("SharedText");
-
-                    // Process the shared text/URL
-                    ProcessSharedText(sharedText);
-                }
-            }
+            options.SaveToPreferences();
         }
 
-        private void ProcessSharedText(string text)
+        private void RemoveQuery_Toggled(object sender, ToggledEventArgs e)
         {
-            // TODO: Implement your link processing logic here
-            // For example, populate an entry field or automatically process the URL
-            // You can use your LinkProcessor class from LinkLaunderer.Lib
+            options.RemoveQueryParameters = e.Value;
         }
 
-        private async void OnCounterClicked(object? sender, EventArgs e)
+        private void HostReplacement_Toggled(object sender, ToggledEventArgs e)
         {
-            string url = "https://www.tiktok.com/@shophikikomori/video/7550414052816604429?_r=1&_t=ZT-90sHupOVCc1";
-            var processor = new LinkProcessor();
-            string result = await processor.Process(url);
+            options.ReplaceDomains = e.Value;
+        }
 
-            count++;
+        private void WwwMatch_Toggled(object sender, ToggledEventArgs e)
+        {
+            options.IncludeWwwInDomainMatching = e.Value;
+        }
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
+        private void LoadPreferences()
+        {
+            options = LinkProcessorOptions.LoadFromPreferences();
+            RemoveQueryParametersSetting.IsToggled = options.RemoveQueryParameters;
+            ReplaceLinkHostsSetting.IsToggled = options.ReplaceDomains;
+            WwwHostSetting.IsToggled = options.IncludeWwwInDomainMatching;
         }
     }
 }

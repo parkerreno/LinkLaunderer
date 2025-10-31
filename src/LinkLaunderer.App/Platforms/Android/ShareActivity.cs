@@ -40,12 +40,12 @@
 
         private async Task HandleSharedText(string sharedText)
         {
-            using (LinkProcessor linkProcessor = new LinkProcessor())
+            using (LinkProcessor linkProcessor = new LinkProcessor(LinkProcessorOptions.LoadFromPreferences()))
             {
-                string newUrl = await linkProcessor.Process(sharedText).ConfigureAwait(true);
+                Uri newUrl = await linkProcessor.Process(sharedText).ConfigureAwait(true);
                 await Share.Default.RequestAsync(new ShareTextRequest
                 {
-                    Text = newUrl,
+                    Text = newUrl.ToString(),
                 }).ConfigureAwait(true);
 
                 Finish();

@@ -12,41 +12,99 @@ namespace LinkLaunderer.Test
     public sealed class LinkProcessorTests
     {
         [TestMethod]
-        public async Task TikTokTest()
+        public async Task TikTok_FullWithQueryParams_NoReplacement()
+        {
+            string url = "https://www.tiktok.com/@shophikikomori/video/7550414052816604429?_r=1&_t=ZT-90sHupOVCc1";
+            var processor = new LinkLaunderer.Lib.LinkProcessor(TestHelpers.DefaultLinkProcessorOptionsWithoutReplacements);
+            Uri result = await processor.Process(url);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("www.tiktok.com", result.Host, "Host should remain unchanged");
+            Assert.AreEqual("https://www.tiktok.com/@shophikikomori/video/7550414052816604429", result.ToString(), "Output url does not match expected value");
+        }
+
+        [TestMethod]
+        public async Task TikTok_ShortLink_NoReplacement()
+        {
+            string url = "https://www.tiktok.com/t/ZP8DFHpxu/";
+            var processor = new LinkLaunderer.Lib.LinkProcessor(TestHelpers.DefaultLinkProcessorOptionsWithoutReplacements);
+            Uri result = await processor.Process(url);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("www.tiktok.com", result.Host, "Host should remain unchanged");
+            Assert.AreEqual("https://www.tiktok.com/@jaimewash/video/7558813645413600525", result.ToString(), "Output url does not match expected value");
+        }
+
+        [TestMethod]
+        public async Task TikTok_FullWithQueryParams_WithReplacement()
         {
             string url = "https://www.tiktok.com/@shophikikomori/video/7550414052816604429?_r=1&_t=ZT-90sHupOVCc1";
             var processor = new LinkLaunderer.Lib.LinkProcessor();
-            string result = await processor.Process(url);
+            Uri result = await processor.Process(url);
+
             Assert.IsNotNull(result);
+            Assert.AreEqual("sticktock.com", result.Host, "Host should remain unchanged");
+            Assert.AreEqual("https://sticktock.com/@shophikikomori/video/7550414052816604429", result.ToString(), "Output url does not match expected value");
         }
 
         [TestMethod]
-        public async Task TikTokRedirTest()
+        public async Task TikTok_ShortLink_WithReplacement()
         {
             string url = "https://www.tiktok.com/t/ZP8DFHpxu/";
             var processor = new LinkLaunderer.Lib.LinkProcessor();
-            string result = await processor.Process(url);
+            Uri result = await processor.Process(url);
+
             Assert.IsNotNull(result);
+            Assert.AreEqual("sticktock.com", result.Host, "Host should remain unchanged");
+            Assert.AreEqual("https://sticktock.com/@jaimewash/video/7558813645413600525", result.ToString(), "Output url does not match expected value");
         }
 
         [TestMethod]
-        public async Task YoutubeStandard()
+        public async Task Youtube_FullLinkNoParams()
         {
             string url = "https://www.youtube.com/watch?v=kN8zXuhOsPA";
             var processor = new LinkLaunderer.Lib.LinkProcessor();
-            string result = await processor.Process(url);
+            Uri result = await processor.Process(url);
+
             Assert.IsNotNull(result);
-            Assert.AreEqual(url, result, "Output url should match input");
+            Assert.AreEqual("www.youtube.com", result.Host, "Host should remain unchanged");
+            Assert.AreEqual(url, result.ToString(), "Output url should match input");
+        }
+        
+        [TestMethod]
+        public async Task Youtube_FullLinkWithParams()
+        {
+            string url = "https://www.youtube.com/watch?v=5wxF7pAQqdc&feature=youtu.be";
+            var processor = new LinkLaunderer.Lib.LinkProcessor();
+            Uri result = await processor.Process(url);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("www.youtube.com", result.Host, "Host should remain unchanged");
+            Assert.AreEqual("https://www.youtube.com/watch?v=5wxF7pAQqdc", result.ToString(), "Output url does not match expected value.");
         }
 
         [TestMethod]
-        public async Task YoutubeShort()
+        public async Task Youtube_ShortLinkNoParams()
         {
             string url = "https://youtu.be/9E1dytfmFxA";
             var processor = new LinkLaunderer.Lib.LinkProcessor();
-            string result = await processor.Process(url);
+            Uri result = await processor.Process(url);
+
             Assert.IsNotNull(result);
-            Assert.AreEqual("https://www.youtube.com/watch?v=9E1dytfmFxA", result, "Output url does not match expected value");
+            Assert.AreEqual("www.youtube.com", result.Host, "Host should be youtube.com (redirected location).");
+            Assert.AreEqual("https://www.youtube.com/watch?v=9E1dytfmFxA", result.ToString(), "Output url does not match expected value");
+        }
+        
+        [TestMethod]
+        public async Task Youtube_ShortLinkWithParams()
+        {
+            string url = "https://youtu.be/5wxF7pAQqdc?si=wmWFr92_Qz02J6q8";
+            var processor = new LinkLaunderer.Lib.LinkProcessor();
+            Uri result = await processor.Process(url);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("www.youtube.com", result.Host, "Host should be youtube.com (redirected location).");
+            Assert.AreEqual("https://www.youtube.com/watch?v=5wxF7pAQqdc", result.ToString(), "Output url does not match expected value");
         }
     }
 }

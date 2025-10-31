@@ -50,7 +50,7 @@
         /// </summary>
         /// <param name="url">The URL to process. Must be a valid absolute or relative URI string.</param>
         /// <returns>A string containing the result of processing the specified URL.</returns>
-        public async Task<string> Process(string url)
+        public async Task<Uri> Process(string url)
         {
             ArgumentNullException.ThrowIfNullOrWhiteSpace(url);
 
@@ -63,7 +63,7 @@
         /// <param name="uri">The URI to be processed. Cannot be null.</param>
         /// <returns>A string containing the result of processing the specified URI. Returns an empty string if no result is
         /// produced.</returns>
-        public async Task<string> Process(Uri uri)
+        public async Task<Uri> Process(Uri uri)
         {
             ArgumentNullException.ThrowIfNull(uri);
 
@@ -86,21 +86,31 @@
             }
             else if (this.options.AllowedParameters.Count > 0)
             {
-                NameValueCollection queryParams = HttpUtility.ParseQueryString(uri.Query);
-                string?[] keys = queryParams.AllKeys;
-                foreach (string? key in keys)
+                NameValueCollection originalQueryParams = HttpUtility.ParseQueryString(uri.Query);
+                NameValueCollection filteredParams = HttpUtility.ParseQueryString(string.Empty);
+                string?[] keys = originalQueryParams.AllKeys;
+                
+                foreach (string allowedParamKey in this.options.AllowedParameters)
                 {
-                    if (!this.options.AllowedParameters.Contains(key))
+                    if (keys.Contains(allowedParamKey))
                     {
-                        queryParams.Remove(key);
+                        filteredParams.Set(allowedParamKey, originalQueryParams[allowedParamKey]);
                     }
                 }
 
-                newUriBuilder.Query = queryParams.ToString() ?? string.Empty;
+                newUriBuilder.Query = filteredParams.ToString() ?? string.Empty;
             }
 
             /* Deal with domain replacements */
-            if (this.options.DomainReplacements.TryGetValue(uri.Host, out string? replacementDomain))
+            if (this.options.ReplaceDomains
+                && this.options.DomainReplacements.TryGetValue(uri.Host, out string? replacementDomain))
+            {
+                newUriBuilder.Host = replacementDomain;
+            }
+            else if (this.options.ReplaceDomains
+                && this.options.IncludeWwwInDomainMatching
+                && uri.Host.StartsWith("www.")
+                && this.options.DomainReplacements.TryGetValue(uri.Host.Substring(4), out replacementDomain))
             {
                 newUriBuilder.Host = replacementDomain;
             }
@@ -109,7 +119,7 @@
                 newUriBuilder.Host = uri.Host;
             }
 
-            return newUriBuilder.Uri.ToString();
+            return newUriBuilder.Uri;
         }
 
         /// <inheritdoc/>
