@@ -54,32 +54,32 @@ namespace LinkLaunderer.Lib
         /// values are used for any preferences that are not set.</returns>
         public static LinkProcessorOptions LoadFromPreferences()
         {
-            Dictionary<string, string> replacements = new();
-            List<string> allowedParams = new();
+            Dictionary<string, string>? replacements = null;
+            List<string>? allowedParams = null;
             bool removeParams = Preferences.Get(Constants.Preferences.RemoveQueryParameters, true);
             bool wwwMatching = Preferences.Get(Constants.Preferences.WwwMatching, true); 
             bool replaceDomains = Preferences.Get(Constants.Preferences.ReplaceDomains, true);
 
             if (Preferences.ContainsKey(Constants.Preferences.DomainReplacements))
             {
-                var json = Preferences.Get(Constants.Preferences.DomainReplacements, string.Empty);
-                replacements = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new();
+                string json = Preferences.Get(Constants.Preferences.DomainReplacements, string.Empty);
+                replacements = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? null;
             }
 
             if (Preferences.ContainsKey(Constants.Preferences.AllowedParameters))
             {
-                var json = Preferences.Get(Constants.Preferences.AllowedParameters, string.Empty);
-                allowedParams = JsonSerializer.Deserialize<List<string>>(json) ?? new();
+                string json = Preferences.Get(Constants.Preferences.AllowedParameters, string.Empty);
+                allowedParams = JsonSerializer.Deserialize<List<string>>(json) ?? null;
             }
 
-            return new LinkProcessorOptions()
-            {
-                ReplaceDomains = replaceDomains,
-                DomainReplacements = replacements,
-                AllowedParameters = allowedParams,
-                RemoveQueryParameters = removeParams,
-                IncludeWwwInDomainMatching = wwwMatching,
-            };
+            LinkProcessorOptions options = LinkProcessorOptions.DefaultOptions();
+            options.AllowedParameters = allowedParams ?? options.AllowedParameters;
+            options.DomainReplacements = replacements ?? options.DomainReplacements;
+            options.RemoveQueryParameters = removeParams;
+            options.IncludeWwwInDomainMatching = wwwMatching;
+            options.ReplaceDomains = replaceDomains;
+
+            return options;
         }
 
         /// <summary>

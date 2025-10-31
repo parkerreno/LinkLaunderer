@@ -11,6 +11,9 @@ namespace LinkLaunderer.Test
     [TestClass]
     public sealed class LinkProcessorTests
     {
+        /// <summary>
+        /// Verifies that a full TikTok URL with query parameters is processed correctly without host replacement.
+        /// </summary>
         [TestMethod]
         public async Task TikTok_FullWithQueryParams_NoReplacement()
         {
@@ -23,6 +26,9 @@ namespace LinkLaunderer.Test
             Assert.AreEqual("https://www.tiktok.com/@shophikikomori/video/7550414052816604429", result.ToString(), "Output url does not match expected value");
         }
 
+        /// <summary>
+        /// Verifies that a TikTok short link is expanded to the full URL without host replacement.
+        /// </summary>
         [TestMethod]
         public async Task TikTok_ShortLink_NoReplacement()
         {
@@ -35,6 +41,25 @@ namespace LinkLaunderer.Test
             Assert.AreEqual("https://www.tiktok.com/@jaimewash/video/7558813645413600525", result.ToString(), "Output url does not match expected value");
         }
 
+        /// <summary>
+        /// The TikTok home page redirects to a relative link, rather than an absolute link, so this test ensures that
+        /// edge case is handled correctly.
+        /// </summary>
+        [TestMethod]
+        public async Task TikTok_HomePage_NoReplacement()
+        {
+            string url = "https://www.tiktok.com/";
+            var processor = new LinkLaunderer.Lib.LinkProcessor(TestHelpers.DefaultLinkProcessorOptionsWithoutReplacements);
+            Uri result = await processor.Process(url);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("www.tiktok.com", result.Host, "Host should remain unchanged");
+            Assert.AreEqual("https://www.tiktok.com/explore", result.ToString(), "Output url does not match expected value");
+        }
+
+        /// <summary>
+        /// Verifies that a full TikTok URL with query parameters is processed correctly with host replacement to sticktock.com.
+        /// </summary>
         [TestMethod]
         public async Task TikTok_FullWithQueryParams_WithReplacement()
         {
@@ -47,6 +72,9 @@ namespace LinkLaunderer.Test
             Assert.AreEqual("https://sticktock.com/@shophikikomori/video/7550414052816604429", result.ToString(), "Output url does not match expected value");
         }
 
+        /// <summary>
+        /// Verifies that a TikTok short link is expanded and host is replaced with sticktock.com.
+        /// </summary>
         [TestMethod]
         public async Task TikTok_ShortLink_WithReplacement()
         {
@@ -59,6 +87,9 @@ namespace LinkLaunderer.Test
             Assert.AreEqual("https://sticktock.com/@jaimewash/video/7558813645413600525", result.ToString(), "Output url does not match expected value");
         }
 
+        /// <summary>
+        /// Verifies that a full YouTube URL without query parameters is processed correctly without modification.
+        /// </summary>
         [TestMethod]
         public async Task Youtube_FullLinkNoParams()
         {
@@ -71,6 +102,9 @@ namespace LinkLaunderer.Test
             Assert.AreEqual(url, result.ToString(), "Output url should match input");
         }
         
+        /// <summary>
+        /// Verifies that a full YouTube URL with query parameters has the extra parameters removed.
+        /// </summary>
         [TestMethod]
         public async Task Youtube_FullLinkWithParams()
         {
@@ -83,6 +117,9 @@ namespace LinkLaunderer.Test
             Assert.AreEqual("https://www.youtube.com/watch?v=5wxF7pAQqdc", result.ToString(), "Output url does not match expected value.");
         }
 
+        /// <summary>
+        /// Verifies that a YouTube short link (youtu.be) without parameters is expanded to the full youtube.com URL.
+        /// </summary>
         [TestMethod]
         public async Task Youtube_ShortLinkNoParams()
         {
@@ -95,6 +132,9 @@ namespace LinkLaunderer.Test
             Assert.AreEqual("https://www.youtube.com/watch?v=9E1dytfmFxA", result.ToString(), "Output url does not match expected value");
         }
         
+        /// <summary>
+        /// Verifies that a YouTube short link (youtu.be) with parameters is expanded to the full youtube.com URL with parameters removed.
+        /// </summary>
         [TestMethod]
         public async Task Youtube_ShortLinkWithParams()
         {

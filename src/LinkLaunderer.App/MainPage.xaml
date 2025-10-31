@@ -5,6 +5,21 @@
              x:Class="LinkLaunderer.MainPage"
              Title="Settings">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="About" 
+                     Order="Secondary" 
+                     Priority="0"
+                     Clicked="OnAboutClicked" />
+        <ToolbarItem Text="Barf Settings" 
+                     Order="Secondary" 
+                     Priority="1"
+                     Clicked="OnPrintClicked" />
+        <ToolbarItem Text="Reset Settings" 
+                     Order="Secondary" 
+                     Priority="2"
+                     Clicked="OnResetClicked" />
+    </ContentPage.ToolbarItems>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

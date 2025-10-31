@@ -72,7 +72,17 @@
 
             if (redirectedLocation != null)
             {
-                uri = redirectedLocation;
+                if (redirectedLocation.IsAbsoluteUri)
+                {
+                    uri = redirectedLocation;
+                }
+                else
+                {
+                    UriBuilder combinedUriBuilder = new(uri.Host);
+                    combinedUriBuilder.Scheme = uri.Scheme;
+                    combinedUriBuilder.Path = redirectedLocation.ToString();
+                    uri = combinedUriBuilder.Uri;
+                }
             }
 
             UriBuilder newUriBuilder = new();
