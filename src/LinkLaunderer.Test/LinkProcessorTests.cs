@@ -1,5 +1,6 @@
 namespace LinkLaunderer.Test
 {
+    using LinkLaunderer.Lib;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -18,7 +19,7 @@ namespace LinkLaunderer.Test
         public async Task TikTok_FullWithQueryParams_NoReplacement()
         {
             string url = "https://www.tiktok.com/@shophikikomori/video/7550414052816604429?_r=1&_t=ZT-90sHupOVCc1";
-            var processor = new LinkLaunderer.Lib.LinkProcessor(TestHelpers.DefaultLinkProcessorOptionsWithoutReplacements);
+            LinkProcessor processor = new LinkLaunderer.Lib.LinkProcessor(TestHelpers.DefaultLinkProcessorOptionsWithoutReplacements);
             Uri result = await processor.Process(url);
 
             Assert.IsNotNull(result);
@@ -33,7 +34,7 @@ namespace LinkLaunderer.Test
         public async Task TikTok_ShortLink_NoReplacement()
         {
             string url = "https://www.tiktok.com/t/ZP8DFHpxu/";
-            var processor = new LinkLaunderer.Lib.LinkProcessor(TestHelpers.DefaultLinkProcessorOptionsWithoutReplacements);
+            LinkProcessor processor = new LinkLaunderer.Lib.LinkProcessor(TestHelpers.DefaultLinkProcessorOptionsWithoutReplacements);
             Uri result = await processor.Process(url);
 
             Assert.IsNotNull(result);
@@ -49,7 +50,7 @@ namespace LinkLaunderer.Test
         public async Task TikTok_HomePage_NoReplacement()
         {
             string url = "https://www.tiktok.com/";
-            var processor = new LinkLaunderer.Lib.LinkProcessor(TestHelpers.DefaultLinkProcessorOptionsWithoutReplacements);
+            LinkProcessor processor = new LinkLaunderer.Lib.LinkProcessor(TestHelpers.DefaultLinkProcessorOptionsWithoutReplacements);
             Uri result = await processor.Process(url);
 
             Assert.IsNotNull(result);
@@ -64,7 +65,7 @@ namespace LinkLaunderer.Test
         public async Task TikTok_FullWithQueryParams_WithReplacement()
         {
             string url = "https://www.tiktok.com/@shophikikomori/video/7550414052816604429?_r=1&_t=ZT-90sHupOVCc1";
-            var processor = new LinkLaunderer.Lib.LinkProcessor();
+            LinkProcessor processor = new LinkLaunderer.Lib.LinkProcessor();
             Uri result = await processor.Process(url);
 
             Assert.IsNotNull(result);
@@ -79,7 +80,7 @@ namespace LinkLaunderer.Test
         public async Task TikTok_ShortLink_WithReplacement()
         {
             string url = "https://www.tiktok.com/t/ZP8DFHpxu/";
-            var processor = new LinkLaunderer.Lib.LinkProcessor();
+            LinkProcessor processor = new LinkLaunderer.Lib.LinkProcessor();
             Uri result = await processor.Process(url);
 
             Assert.IsNotNull(result);
@@ -94,14 +95,14 @@ namespace LinkLaunderer.Test
         public async Task Youtube_FullLinkNoParams()
         {
             string url = "https://www.youtube.com/watch?v=kN8zXuhOsPA";
-            var processor = new LinkLaunderer.Lib.LinkProcessor();
+            LinkProcessor processor = new LinkLaunderer.Lib.LinkProcessor();
             Uri result = await processor.Process(url);
 
             Assert.IsNotNull(result);
             Assert.AreEqual("www.youtube.com", result.Host, "Host should remain unchanged");
             Assert.AreEqual(url, result.ToString(), "Output url should match input");
         }
-        
+
         /// <summary>
         /// Verifies that a full YouTube URL with query parameters has the extra parameters removed.
         /// </summary>
@@ -109,7 +110,7 @@ namespace LinkLaunderer.Test
         public async Task Youtube_FullLinkWithParams()
         {
             string url = "https://www.youtube.com/watch?v=5wxF7pAQqdc&feature=youtu.be";
-            var processor = new LinkLaunderer.Lib.LinkProcessor();
+            LinkProcessor processor = new LinkLaunderer.Lib.LinkProcessor();
             Uri result = await processor.Process(url);
 
             Assert.IsNotNull(result);
@@ -124,14 +125,14 @@ namespace LinkLaunderer.Test
         public async Task Youtube_ShortLinkNoParams()
         {
             string url = "https://youtu.be/9E1dytfmFxA";
-            var processor = new LinkLaunderer.Lib.LinkProcessor();
+            LinkProcessor processor = new LinkLaunderer.Lib.LinkProcessor();
             Uri result = await processor.Process(url);
 
             Assert.IsNotNull(result);
             Assert.AreEqual("www.youtube.com", result.Host, "Host should be youtube.com (redirected location).");
             Assert.AreEqual("https://www.youtube.com/watch?v=9E1dytfmFxA", result.ToString(), "Output url does not match expected value");
         }
-        
+
         /// <summary>
         /// Verifies that a YouTube short link (youtu.be) with parameters is expanded to the full youtube.com URL with parameters removed.
         /// </summary>
@@ -139,7 +140,7 @@ namespace LinkLaunderer.Test
         public async Task Youtube_ShortLinkWithParams()
         {
             string url = "https://youtu.be/5wxF7pAQqdc?si=wmWFr92_Qz02J6q8";
-            var processor = new LinkLaunderer.Lib.LinkProcessor();
+            LinkProcessor processor = new LinkLaunderer.Lib.LinkProcessor();
             Uri result = await processor.Process(url);
 
             Assert.IsNotNull(result);

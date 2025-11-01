@@ -58,7 +58,7 @@ namespace LinkLaunderer.Lib
             Dictionary<string, string>? replacements = null;
             ObservableCollection<string>? allowedParams = null;
             bool removeParams = Preferences.Get(Constants.Preferences.RemoveQueryParameters, true);
-            bool wwwMatching = Preferences.Get(Constants.Preferences.WwwMatching, true); 
+            bool wwwMatching = Preferences.Get(Constants.Preferences.WwwMatching, true);
             bool replaceDomains = Preferences.Get(Constants.Preferences.ReplaceDomains, true);
 
             if (Preferences.ContainsKey(Constants.Preferences.DomainReplacements))

@@ -1,7 +1,5 @@
 ﻿namespace LinkLaunderer
 {
-    using Microsoft.Extensions.DependencyInjection;
-
     public partial class App : Application
     {
         public App()

@@ -99,7 +99,7 @@
                 NameValueCollection originalQueryParams = HttpUtility.ParseQueryString(uri.Query);
                 NameValueCollection filteredParams = HttpUtility.ParseQueryString(string.Empty);
                 string?[] keys = originalQueryParams.AllKeys;
-                
+
                 foreach (string allowedParamKey in this.options.AllowedParameters)
                 {
                     if (keys.Contains(allowedParamKey, StringComparer.OrdinalIgnoreCase))
