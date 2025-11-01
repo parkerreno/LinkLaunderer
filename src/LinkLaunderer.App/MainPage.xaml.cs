@@ -45,7 +45,7 @@
         /// </summary>
         /// <param name="sender">The source of the event, typically the control that initiated the save action.</param>
         /// <param name="e">An EventArgs instance containing event data.</param>
-        private async void OnSaveClicked(object? sender, EventArgs e)
+        private void OnSaveClicked(object? sender, EventArgs e)
         {
             this.options.SaveToPreferences();
         }
@@ -248,16 +248,14 @@
                 return;
             }
 
-            if (this.options.DomainReplacements.ContainsKey(host))
-            {
-                if (!await this.DisplayAlertAsync(
+            if (this.options.DomainReplacements.ContainsKey(host)
+                && !await this.DisplayAlertAsync(
                     title: "Host Already Exists",
                     message: "This hostname is already exists - replace entry?",
                     accept: "Replace",
                     cancel: "Cancel"))
-                {
-                    return;
-                }
+            {
+                return;
             }
 
             this.options.DomainReplacements[host] = replacement;
