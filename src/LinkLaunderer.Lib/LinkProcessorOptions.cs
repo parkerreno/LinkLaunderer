@@ -1,5 +1,6 @@
 namespace LinkLaunderer.Lib
 {
+    using System.Collections.ObjectModel;
     using System.Text.Json;
 
     /// <summary>
@@ -33,7 +34,7 @@ namespace LinkLaunderer.Lib
         /// <summary>
         /// Allowed parameters when <see cref="RemoveQueryParameters"/> is true.
         /// </summary>
-        public required List<string> AllowedParameters { get; set; }
+        public required ObservableCollection<string> AllowedParameters { get; set; }
 
         /// <summary>
         /// Saves the current configuration settings to application preferences.
@@ -55,7 +56,7 @@ namespace LinkLaunderer.Lib
         public static LinkProcessorOptions LoadFromPreferences()
         {
             Dictionary<string, string>? replacements = null;
-            List<string>? allowedParams = null;
+            ObservableCollection<string>? allowedParams = null;
             bool removeParams = Preferences.Get(Constants.Preferences.RemoveQueryParameters, true);
             bool wwwMatching = Preferences.Get(Constants.Preferences.WwwMatching, true); 
             bool replaceDomains = Preferences.Get(Constants.Preferences.ReplaceDomains, true);
@@ -69,7 +70,7 @@ namespace LinkLaunderer.Lib
             if (Preferences.ContainsKey(Constants.Preferences.AllowedParameters))
             {
                 string json = Preferences.Get(Constants.Preferences.AllowedParameters, string.Empty);
-                allowedParams = JsonSerializer.Deserialize<List<string>>(json) ?? null;
+                allowedParams = JsonSerializer.Deserialize<ObservableCollection<string>>(json) ?? null;
             }
 
             LinkProcessorOptions options = LinkProcessorOptions.DefaultOptions();
@@ -102,7 +103,7 @@ namespace LinkLaunderer.Lib
                     { "twitter.com", "xcancel.com" },
                     { "tiktok.com", "sticktock.com" },
                 },
-                AllowedParameters = new List<string>()
+                AllowedParameters = new ObservableCollection<string>()
                 {
                     "v",
                 },
