@@ -21,8 +21,8 @@ public partial class SettingsItem : ContentView
     /// </summary>
     public string LabelText
     {
-        get => (string)GetValue(LabelTextProperty);
-        set => SetValue(LabelTextProperty, value);
+        get => (string)this.GetValue(LabelTextProperty);
+        set => this.SetValue(LabelTextProperty, value);
     }
 
     /// <summary>
@@ -30,8 +30,8 @@ public partial class SettingsItem : ContentView
     /// </summary>
     public string DescriptionText
     {
-        get => (string)GetValue(DescriptionTextProperty);
-        set => SetValue(DescriptionTextProperty, value);
+        get => (string)this.GetValue(DescriptionTextProperty);
+        set => this.SetValue(DescriptionTextProperty, value);
     }
 
     /// <summary>
@@ -39,8 +39,8 @@ public partial class SettingsItem : ContentView
     /// </summary>
     public bool IsToggled
     {
-        get => (bool)GetValue(IsToggledProperty);
-        set => SetValue(IsToggledProperty, value);
+        get => (bool)this.GetValue(IsToggledProperty);
+        set => this.SetValue(IsToggledProperty, value);
     }
 
     /// <summary>
@@ -48,7 +48,7 @@ public partial class SettingsItem : ContentView
     /// </summary>
     public SettingsItem()
     {
-        InitializeComponent();
+        this.InitializeComponent();
     }
 
     /// <summary>

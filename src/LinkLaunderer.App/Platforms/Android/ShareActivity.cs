@@ -22,19 +22,19 @@
             base.OnCreate(savedInstanceState);
 
             // Handle the incoming share intent
-            if (Intent.ActionSend.Equals(Intent?.Action) && Intent.Type?.StartsWith("text/") == true)
+            if (Intent.ActionSend.Equals(this.Intent?.Action) && this.Intent.Type?.StartsWith("text/") == true)
             {
-                string? sharedText = Intent.GetStringExtra(Intent.ExtraText);
+                string? sharedText = this.Intent.GetStringExtra(Intent.ExtraText);
 
                 if (!string.IsNullOrEmpty(sharedText))
                 {
                     // Process the shared text/URL
-                    await HandleSharedText(sharedText);
+                    await this.HandleSharedText(sharedText);
                 }
             }
             else
             {
-                Finish();
+                this.Finish();
             }
         }
 
@@ -48,7 +48,7 @@
                     Text = newUrl.ToString(),
                 }).ConfigureAwait(true);
 
-                Finish();
+                this.Finish();
             }
         }
     }

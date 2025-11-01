@@ -5,6 +5,9 @@
     /// </summary>
     internal class Constants
     {
+        /// <summary>
+        /// Keys used for persisting user preferences.
+        /// </summary>
         internal class Preferences
         {
             internal const string ReplaceDomains = "ReplaceDomains";

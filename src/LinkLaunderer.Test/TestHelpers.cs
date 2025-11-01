@@ -7,6 +7,9 @@
 
     internal class TestHelpers
     {
+        /// <summary>
+        /// Gets the default link processor options with domain replacements cleared.
+        /// </summary>
         internal static LinkProcessorOptions DefaultLinkProcessorOptionsWithoutReplacements
         {
             get

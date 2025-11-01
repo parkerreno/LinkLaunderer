@@ -6,7 +6,7 @@
     {
         public App()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
