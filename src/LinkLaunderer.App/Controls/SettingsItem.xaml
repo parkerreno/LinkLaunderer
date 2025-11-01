@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LinkLaunderer.Controls.SettingsItem"
+             x:Name="this">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label 
+            Grid.Column="0"
+            Grid.Row="0"
+            Text="{Binding Source={x:Reference this}, Path=LabelText}"
+            Style="{StaticResource SettingLabel}"/>
+        <Label
+            Grid.Column="0"
+            Grid.Row="1"
+            Text="{Binding Source={x:Reference this}, Path=DescriptionText}"/>
+        <Switch
+            Grid.Column="1"
+            Grid.RowSpan="2"
+            IsToggled="{Binding Source={x:Reference this}, Path=IsToggled}"
+            Toggled="OnSwitchToggled"/>
+    </Grid>
+</ContentView>

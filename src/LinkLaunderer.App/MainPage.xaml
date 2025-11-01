@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:LinkLaunderer.Controls"
+             x:Class="LinkLaunderer.MainPage"
+             Title="Settings">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="About" 
+                     Order="Secondary" 
+                     Priority="0"
+                     Clicked="OnAboutClicked" />
+        <ToolbarItem Text="Barf Settings" 
+                     Order="Secondary" 
+                     Priority="1"
+                     Clicked="OnPrintClicked" />
+        <ToolbarItem Text="Reset Settings" 
+                     Order="Secondary" 
+                     Priority="2"
+                     Clicked="OnResetClicked" />
+    </ContentPage.ToolbarItems>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="12">
+
+            <controls:SettingsItem
+                x:Name="RemoveQueryParametersSetting"
+                LabelText="Remove Query Parameters"
+                DescriptionText="Removes non-allowed query parameters from links"
+                Toggled="RemoveQuery_Toggled"/>
+
+            <CollectionView
+                x:Name="AllowedParamsList"
+                SelectionMode="None"
+                Margin="12,-6,0,0">
+
+                <CollectionView.Header>
+                    <Grid
+                        Padding="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Grid.Column="0"
+                            Text="Allowed Parameters"
+                            Style="{StaticResource ListHeader}"
+                            VerticalOptions="Center"/>
+                        <Button
+                            Grid.Column="2"
+                            Text="➕"
+                            BackgroundColor="Transparent"
+                            Clicked="AddParamClicked"/>
+                    </Grid>
+                </CollectionView.Header>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            Padding="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Grid.Column="0"
+                                Text="{Binding}"
+                                VerticalOptions="Center"/>
+                            <Button
+                                Grid.Column="2"
+                                Text="🗑️"
+                                BackgroundColor="Transparent"
+                                Clicked="OnDeleteParamClicked"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <controls:SettingsItem
+                x:Name="ReplaceLinkHostsSetting"
+                LabelText="Replace Link Hosts"
+                DescriptionText="Perform link host replacements"
+                Toggled="HostReplacement_Toggled"/>
+
+            <controls:SettingsItem
+                Margin="12,0,0,0"
+                x:Name="WwwHostSetting"
+                LabelText="Auto-Match www Prefix"
+                DescriptionText="Don't require separate host entries for www.* subdomains"
+                Toggled="WwwMatch_Toggled"/>
+
+            <CollectionView
+                x:Name="HostReplacementList"
+                SelectionMode="None"
+                Margin="12,-6,0,0">
+
+                <CollectionView.Header>
+                    <Grid
+                        Padding="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Grid.Column="0"
+                            Text="Host"
+                            Style="{StaticResource ListHeader}"
+                            VerticalOptions="Center"/>
+                        <Label
+                            Grid.Column="1"
+                            Text="Replacement"
+                            Style="{StaticResource ListHeader}"
+                            VerticalOptions="Center"/>
+                        <Button
+                            Grid.Column="2"
+                            Text="➕"
+                            BackgroundColor="Transparent"
+                            Clicked="AddReplacementClicked"/>
+                    </Grid>
+                </CollectionView.Header>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            Padding="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Grid.Column="0"
+                                Text="{Binding Key}"
+                                VerticalOptions="Center"/>
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding Value}"
+                                VerticalOptions="Center"/>
+                            <Button
+                                Grid.Column="2"
+                                Text="🗑️"
+                                BackgroundColor="Transparent"
+                                Clicked="OnDeleteHostReplacementClicked"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+
+        <Button
+            Grid.Row="1"
+            Margin="12"
+            x:Name="SaveButton"
+            Text="Save Changes" 
+            SemanticProperties.Hint="Saves changes to preferences"
+            Clicked="OnSaveClicked"
+            HorizontalOptions="Fill" />
+    </Grid>
+
+</ContentPage>
