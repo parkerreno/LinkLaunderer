@@ -76,6 +76,7 @@ namespace LinkLaunderer.Lib
             LinkProcessorOptions options = LinkProcessorOptions.DefaultOptions();
             options.AllowedParameters = allowedParams ?? options.AllowedParameters;
             options.DomainReplacements = replacements ?? options.DomainReplacements;
+            options.DomainReplacements = new Dictionary<string, string>(options.DomainReplacements, StringComparer.OrdinalIgnoreCase);
             options.RemoveQueryParameters = removeParams;
             options.IncludeWwwInDomainMatching = wwwMatching;
             options.ReplaceDomains = replaceDomains;
@@ -97,7 +98,7 @@ namespace LinkLaunderer.Lib
             {
                 ReplaceDomains = true,
                 IncludeWwwInDomainMatching = true,
-                DomainReplacements = new Dictionary<string, string>()
+                DomainReplacements = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                 {
                     { "x.com", "xcancel.com" },
                     { "twitter.com", "xcancel.com" },

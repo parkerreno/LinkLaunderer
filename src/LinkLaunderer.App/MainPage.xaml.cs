@@ -8,40 +8,25 @@
     {
         LinkProcessorOptions options;
 
+        /// <summary>
+        /// Initializes a new instance of the MainPage class and loads user preferences.
+        /// </summary>
         public MainPage()
         {
             this.InitializeComponent();
             this.LoadPreferences();
         }
 
+        /// <inheritdoc/>
         protected override void OnAppearing()
         {
             base.OnAppearing();
             this.LoadPreferences();
         }
 
-        private async void OnSaveClicked(object? sender, EventArgs e)
-        {
-            this.options.SaveToPreferences();
-        }
-
-        private void RemoveQuery_Toggled(object sender, ToggledEventArgs e)
-        {
-            this.options.RemoveQueryParameters = e.Value;
-            this.DeterminAllowedParamsVisibility();
-        }
-
-        private void HostReplacement_Toggled(object sender, ToggledEventArgs e)
-        {
-            this.options.ReplaceDomains = e.Value;
-            this.DetermineHostPreferenceVisibility();
-        }
-
-        private void WwwMatch_Toggled(object sender, ToggledEventArgs e)
-        {
-            this.options.IncludeWwwInDomainMatching = e.Value;
-        }
-
+        /// <summary>
+        /// Handles loading preferences from persistent storage and updating the UI elements to reflect the current settings.
+        /// </summary>
         private void LoadPreferences()
         {
             // Yes all of this should be MVVM bindings, but this is a MVP.  Might consider in future.
@@ -52,9 +37,57 @@
             this.HostReplacementList.ItemsSource = this.options.DomainReplacements;
             this.AllowedParamsList.ItemsSource = this.options.AllowedParameters;
             this.DetermineHostPreferenceVisibility();
-            this.DeterminAllowedParamsVisibility();
+            this.DetermineAllowedParamsVisibility();
         }
 
+        /// <summary>
+        /// Handles the save action by persisting the current options to user preferences.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the control that initiated the save action.</param>
+        /// <param name="e">An EventArgs instance containing event data.</param>
+        private async void OnSaveClicked(object? sender, EventArgs e)
+        {
+            this.options.SaveToPreferences();
+        }
+
+        /// <summary>
+        /// Handles the toggling of the option to remove query parameters when the associated UI element is toggled.
+        /// </summary>
+        /// <param name="sender">The source object that raised the event, typically the UI element whose toggle state changed.</param>
+        /// <param name="e">An object containing the event data, including the new toggle state.</param>
+        private void RemoveQuery_Toggled(object sender, ToggledEventArgs e)
+        {
+            this.options.RemoveQueryParameters = e.Value;
+            this.DetermineAllowedParamsVisibility();
+        }
+
+        /// <summary>
+        /// Handles the toggling of the host replacement option by updating the domain replacement setting and adjusting
+        /// host preference visibility.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the control that triggered the toggle action.</param>
+        /// <param name="e">The event data containing the new toggle state.</param>
+        private void HostReplacement_Toggled(object sender, ToggledEventArgs e)
+        {
+            this.options.ReplaceDomains = e.Value;
+            this.DetermineHostPreferenceVisibility();
+        }
+
+        /// <summary>
+        /// Handles the toggling of the 'Include www in domain matching' option when the associated UI element is
+        /// toggled.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the UI element that was toggled.</param>
+        /// <param name="e">The event data containing the new toggle state.</param>
+        private void WwwMatch_Toggled(object sender, ToggledEventArgs e)
+        {
+            this.options.IncludeWwwInDomainMatching = e.Value;
+        }
+
+        /// <summary>
+        /// Updates the visibility and fade animation of host preference UI elements based on the current domain
+        /// replacement option.
+        /// </summary>
         private async void DetermineHostPreferenceVisibility()
         {
             if (this.options.ReplaceDomains)
@@ -75,7 +108,10 @@
             }
         }
 
-        private async void DeterminAllowedParamsVisibility()
+        /// <summary>
+        /// Updates the visibility of the allowed parameters list based on the current options.
+        /// </summary>
+        private async void DetermineAllowedParamsVisibility()
         {
             if (this.options.RemoveQueryParameters)
             {
@@ -93,6 +129,12 @@
             }
         }
 
+        /// <summary>
+        /// Handles the About button click event by displaying information about LinkLaunderer and offering to copy the
+        /// project URL to the clipboard.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the About button that was clicked.</param>
+        /// <param name="e">An EventArgs instance containing event data associated with the click event.</param>
         private async void OnAboutClicked(object sender, EventArgs e)
         {
             string settingsJson = "https://github.com/parkerreno/linklaunderer";
@@ -108,6 +150,12 @@
             }
         }
 
+        /// <summary>
+        /// Handles the print button click event by displaying the current settings in a dialog and optionally copying
+        /// them to the clipboard.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the print button that was clicked.</param>
+        /// <param name="e">An EventArgs instance containing event data associated with the click event.</param>
         private async void OnPrintClicked(object sender, EventArgs e)
         {
             string settingsJson = JsonSerializer.Serialize(this.options, new JsonSerializerOptions { WriteIndented = true });
@@ -123,6 +171,14 @@
             }
         }
 
+        /// <summary>
+        /// Handles the reset button click event by prompting the user to confirm resetting all settings to their
+        /// application defaults.
+        /// </summary>
+        /// <remarks>If the user confirms the reset, all settings are restored to their default values and
+        /// saved to preferences. This action cannot be undone.</remarks>
+        /// <param name="sender">The source of the event, typically the reset button control.</param>
+        /// <param name="e">An EventArgs instance containing event data.</param>
         private async void OnResetClicked(object sender, EventArgs e)
         {
             bool reset = await this.DisplayAlertAsync(
@@ -139,6 +195,15 @@
             }
         }
 
+        /// <summary>
+        /// Handles the click event for deleting a host replacement entry from the domain replacements list.
+        /// </summary>
+        /// <remarks>After removing the host replacement, the method refreshes the host replacement list
+        /// to reflect the changes. This event handler assumes the sender's BindingContext is a KeyValuePair containing
+        /// the relevant key.</remarks>
+        /// <param name="sender">The source of the event, expected to be a Button whose BindingContext contains the key of the host
+        /// replacement to remove.</param>
+        /// <param name="e">An EventArgs instance that contains the event data.</param>
         private void OnDeleteHostReplacementClicked(object sender, EventArgs e)
         {
             Button? buttonSender = sender as Button;
@@ -157,6 +222,12 @@
             }
         }
 
+        /// <summary>
+        /// Handles the click event to add or update a host name replacement entry. Prompts the user for a host name and
+        /// its replacement, and updates the replacement list accordingly.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the UI element that was clicked.</param>
+        /// <param name="e">An EventArgs instance containing event data.</param>
         private async void AddReplacementClicked(object sender, EventArgs e)
         {
             string host = await this.DisplayPromptAsync(
@@ -196,6 +267,13 @@
             this.HostReplacementList.ItemsSource = this.options.DomainReplacements;
         }
 
+        /// <summary>
+        /// Handles the event triggered when the user requests to add a new allowed query parameter.
+        /// </summary>
+        /// <remarks>Prompts the user to enter a query parameter name and adds it to the allowed
+        /// parameters list if it is not already present and is not empty or whitespace.</remarks>
+        /// <param name="sender">The source of the event, typically the UI element that was interacted with.</param>
+        /// <param name="e">An EventArgs instance containing event data.</param>
         private async void AddParamClicked(object sender, EventArgs e)
         {
             string param = await this.DisplayPromptAsync(
@@ -213,6 +291,11 @@
             }
         }
 
+        /// <summary>
+        /// Handles the click event for deleting a parameter from the allowed parameters list.
+        /// </summary>
+        /// <param name="sender">The source of the event, expected to be a Button whose BindingContext contains the parameter key to remove.</param>
+        /// <param name="e">An EventArgs instance containing event data.</param>
         private void OnDeleteParamClicked(object sender, EventArgs e)
         {
             Button? buttonSender = sender as Button;

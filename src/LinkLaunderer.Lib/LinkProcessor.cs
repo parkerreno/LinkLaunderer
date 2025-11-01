@@ -102,7 +102,7 @@
                 
                 foreach (string allowedParamKey in this.options.AllowedParameters)
                 {
-                    if (keys.Contains(allowedParamKey))
+                    if (keys.Contains(allowedParamKey, StringComparer.OrdinalIgnoreCase))
                     {
                         filteredParams.Set(allowedParamKey, originalQueryParams[allowedParamKey]);
                     }
