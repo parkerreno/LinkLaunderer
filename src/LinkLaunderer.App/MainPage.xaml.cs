@@ -251,7 +251,7 @@
             if (this.options.DomainReplacements.ContainsKey(host)
                 && !await this.DisplayAlertAsync(
                     title: "Host Already Exists",
-                    message: "This hostname is already exists - replace entry?",
+                    message: "This hostname already exists - replace entry?",
                     accept: "Replace",
                     cancel: "Cancel"))
             {
