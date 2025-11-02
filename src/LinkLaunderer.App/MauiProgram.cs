@@ -2,6 +2,8 @@
 {
     public static class MauiProgram
     {
+        using Microsoft.Extensions.Logging;
+        
         public static MauiApp CreateMauiApp()
         {
             MauiAppBuilder builder = MauiApp.CreateBuilder();
