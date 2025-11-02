@@ -1,5 +1,7 @@
 ﻿namespace LinkLaunderer
 {
+    using Microsoft.Extensions.Logging;
+     
     public static class MauiProgram
     {
         public static MauiApp CreateMauiApp()
