@@ -62,12 +62,12 @@ namespace LinkLaunderer.WinUI
                 // Try to get text data
                 if (shareOperation.Data.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.Text))
                 {
-                    sharedText = await shareOperation.Data.GetTextAsync();
+                    sharedText = await shareOperation.Data.GetTextAsync().ConfigureAwait(false);
                 }
                 // Try to get web link
                 else if (shareOperation.Data.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.WebLink))
                 {
-                    var webLink = await shareOperation.Data.GetWebLinkAsync();
+                    var webLink = await shareOperation.Data.GetWebLinkAsync().ConfigureAwait(false);
                     sharedText = webLink?.ToString();
                 }
 
@@ -76,16 +76,16 @@ namespace LinkLaunderer.WinUI
                     // Process the shared text/URL
                     using (LinkProcessor linkProcessor = new LinkProcessor(LinkProcessorOptions.LoadFromPreferences()))
                     {
-                        Uri newUrl = await linkProcessor.Process(sharedText).ConfigureAwait(true);
+                        Uri newUrl = await linkProcessor.Process(sharedText).ConfigureAwait(false);
                         
                         // Copy to clipboard as a fallback
-                        await Microsoft.Maui.ApplicationModel.DataTransfer.Clipboard.SetTextAsync(newUrl.ToString());
+                        await Microsoft.Maui.ApplicationModel.DataTransfer.Clipboard.SetTextAsync(newUrl.ToString()).ConfigureAwait(false);
 
                         // Try to share the processed URL
                         await Microsoft.Maui.ApplicationModel.DataTransfer.Share.Default.RequestAsync(new Microsoft.Maui.ApplicationModel.DataTransfer.ShareTextRequest
                         {
                             Text = newUrl.ToString(),
-                        }).ConfigureAwait(true);
+                        }).ConfigureAwait(false);
                     }
 
                     shareOperation.ReportCompleted();
