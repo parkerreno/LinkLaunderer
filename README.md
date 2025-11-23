@@ -8,4 +8,4 @@ An app to clean up URLs for sharing
 | ⚠️ | Android | Currently in development, working but unstable |
 | ⛔ | iOS     | Future development |
 | ⛔ | macOS   | Future development |
-| ⛔ | Windows | Future development |
+| ⚠️ | Windows | Currently in development, working but unstable |
