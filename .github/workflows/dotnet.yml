@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-
+    name: Build
     runs-on: windows-latest
 
     steps:
@@ -27,6 +27,34 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --verbosity normal
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: |
+          **/bin/**
+          **/obj/**
+        retention-days: 1
+
+  test:
+    name: Test
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+    - name: Install MAUI workloads
+      run: dotnet workload install maui-android maui-tizen maui-ios
+    - name: Restore workloads
+      run: dotnet workload restore
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-artifacts
     - name: Test
       run: dotnet test --no-build --verbosity normal
