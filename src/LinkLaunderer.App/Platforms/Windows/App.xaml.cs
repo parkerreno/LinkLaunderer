@@ -27,7 +27,7 @@ namespace LinkLaunderer.WinUI
 
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 
-        protected override void OnLaunched(LaunchActivatedEventArgs args)
+        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             // Check if the app was activated as a share target
             var activationArgs = Microsoft.Windows.AppLifecycle.AppInstance.GetCurrent().GetActivatedEventArgs();
@@ -37,15 +37,11 @@ namespace LinkLaunderer.WinUI
                 var shareArgs = activationArgs.Data as ShareTargetActivatedEventArgs;
                 if (shareArgs != null)
                 {
-                    pendingShareOperation = shareArgs.ShareOperation;
+                    this.pendingShareOperation = shareArgs.ShareOperation;
                     // Continue with normal MAUI initialization
                     base.OnLaunched(args);
-                    
-                    // Handle the share operation after MAUI is initialized
-                    if (MauiContext != null)
-                    {
-                        _ = HandleShareAsync(pendingShareOperation);
-                    }
+
+                    _ = HandleShareAsync(this.pendingShareOperation);
                     return;
                 }
             }
@@ -62,12 +58,12 @@ namespace LinkLaunderer.WinUI
                 // Try to get text data
                 if (shareOperation.Data.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.Text))
                 {
-                    sharedText = await shareOperation.Data.GetTextAsync().ConfigureAwait(false);
+                    sharedText = await shareOperation.Data.GetTextAsync();
                 }
                 // Try to get web link
                 else if (shareOperation.Data.Contains(Windows.ApplicationModel.DataTransfer.StandardDataFormats.WebLink))
                 {
-                    var webLink = await shareOperation.Data.GetWebLinkAsync().ConfigureAwait(false);
+                    var webLink = await shareOperation.Data.GetWebLinkAsync();
                     sharedText = webLink?.ToString();
                 }
 
@@ -77,7 +73,7 @@ namespace LinkLaunderer.WinUI
                     using (LinkProcessor linkProcessor = new LinkProcessor(LinkProcessorOptions.LoadFromPreferences()))
                     {
                         Uri newUrl = await linkProcessor.Process(sharedText).ConfigureAwait(false);
-                        
+
                         // Copy to clipboard as a fallback
                         await Microsoft.Maui.ApplicationModel.DataTransfer.Clipboard.SetTextAsync(newUrl.ToString()).ConfigureAwait(false);
 
@@ -104,7 +100,7 @@ namespace LinkLaunderer.WinUI
                 // Close the app after handling the share
                 Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() =>
                 {
-                    (this as IApplication)?.CloseWindow(this.Windows[0]);
+                    (this as IApplication)?.CloseWindow(this.Application.Windows[0]);
                 });
             }
         }
