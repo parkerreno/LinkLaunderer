@@ -102,20 +102,13 @@ namespace LinkLaunderer
                 {
                     Uri newUrl = await linkProcessor.Process(sharedText).ConfigureAwait(true);
                     
-                    // Create a share sheet with the cleaned URL
-                    UIActivityViewController activityViewController = new UIActivityViewController(
-                        new NSObject[] { NSUrl.FromString(newUrl.ToString()) },
-                        null);
-
-                    // Present the share sheet
-                    await this.PresentViewControllerAsync(activityViewController, true);
-
-                    // Wait a bit for user interaction, then complete
-                    // The completion handler will be called when user dismisses the share sheet
-                    activityViewController.SetCompletionHandler((activityType, completed) =>
+                    // Use MAUI's cross-platform Share API to present the share sheet
+                    await Share.Default.RequestAsync(new ShareTextRequest
                     {
-                        this.CompleteRequest();
-                    });
+                        Text = newUrl.ToString(),
+                    }).ConfigureAwait(true);
+
+                    this.CompleteRequest();
                 }
             }
             catch (Exception ex)
