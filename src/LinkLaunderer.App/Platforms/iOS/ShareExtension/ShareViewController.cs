@@ -85,6 +85,7 @@ namespace LinkLaunderer
             }
             catch (Exception ex)
             {
+                // TODO: Replace with proper logging using ILogger for production
                 Console.WriteLine($"Error processing shared content: {ex.Message}");
                 this.CompleteRequest();
             }
@@ -100,19 +101,20 @@ namespace LinkLaunderer
             {
                 using (LinkProcessor linkProcessor = new LinkProcessor(LinkProcessorOptions.LoadFromPreferences()))
                 {
-                    Uri newUrl = await linkProcessor.Process(sharedText).ConfigureAwait(true);
+                    Uri newUrl = await linkProcessor.Process(sharedText).ConfigureAwait(false);
                     
                     // Use MAUI's cross-platform Share API to present the share sheet
                     await Share.Default.RequestAsync(new ShareTextRequest
                     {
                         Text = newUrl.ToString(),
-                    }).ConfigureAwait(true);
+                    }).ConfigureAwait(false);
 
                     this.CompleteRequest();
                 }
             }
             catch (Exception ex)
             {
+                // TODO: Replace with proper logging using ILogger for production
                 Console.WriteLine($"Error handling shared text: {ex.Message}");
                 this.CompleteRequest();
             }
