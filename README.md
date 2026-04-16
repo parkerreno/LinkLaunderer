@@ -1,5 +1,5 @@
 ﻿# LinkLaunderer
-An app to clean up URLs for sharing
+An app to clean up URLs for sharing.
 
 ## Supported Platforms
 
