@@ -78,4 +78,10 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<!-- iOS Share Extension -->
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+		<BundleResource Include="Platforms\iOS\ShareExtension\Info.plist" LogicalName="ShareExtension\Info.plist" />
+		<Compile Include="Platforms\iOS\ShareExtension\ShareViewController.cs" />
+	</ItemGroup>
+
 </Project>

@@ -6,6 +6,6 @@ An app to clean up URLs for sharing.
 |   | Platform | Status |
 |:-:|:---------|:-------|
 | ⚠️ | Android | Currently in development, working but unstable |
-| ⛔ | iOS     | Future development |
+| ⚠️ | iOS     | Currently in development, share extension implemented |
 | ⛔ | macOS   | Future development |
 | ⛔ | Windows | Future development |
