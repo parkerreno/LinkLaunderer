@@ -29,7 +29,13 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action/windows@v2
+      if: always()
+      with:
+        files: |
+          **/test-results.trx
     - name: Build Android APK
       run: dotnet publish src/LinkLaunderer.App/LinkLaunderer.App.csproj -f net10.0-android -c Release
     - name: Upload APK
