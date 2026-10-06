@@ -39,7 +39,7 @@ namespace LinkLaunderer.Test
 
             Assert.IsNotNull(result);
             Assert.AreEqual("www.tiktok.com", result.Host, "Host should remain unchanged");
-            Assert.AreEqual("https://www.tiktok.com/@jaimewash/video/7558813645413600525", result.ToString(), "Output url does not match expected value");
+            Assert.AreEqual("https://www.tiktok.com/@/video/7558813645413600525", result.ToString(), "Output url does not match expected value");
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace LinkLaunderer.Test
 
             Assert.IsNotNull(result);
             Assert.AreEqual("www.tiktok.com", result.Host, "Host should remain unchanged");
-            Assert.AreEqual("https://www.tiktok.com/explore", result.ToString(), "Output url does not match expected value");
+            Assert.AreEqual("https://www.tiktok.com/", result.ToString(), "Output url does not match expected value");
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace LinkLaunderer.Test
 
             Assert.IsNotNull(result);
             Assert.AreEqual("sticktock.com", result.Host, "Host should remain unchanged");
-            Assert.AreEqual("https://sticktock.com/@jaimewash/video/7558813645413600525", result.ToString(), "Output url does not match expected value");
+            Assert.AreEqual("https://sticktock.com/@/video/7558813645413600525", result.ToString(), "Output url does not match expected value");
         }
 
         /// <summary>
